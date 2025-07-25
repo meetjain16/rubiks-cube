@@ -125,30 +125,56 @@
 /* Cube Controls */
 .cube-controls {
   position: absolute;
-  bottom: -60px;
+  bottom: -80px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  space-x: 12px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 4px;
+  align-items: center;
+}
+
+.control-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
 
 .control-btn {
-  padding: 8px 16px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px;
   background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
   border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   color: white;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .control-btn:hover {
   background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
   border-color: rgba(255,255,255,0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+.control-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-top: 4px;
 }
 
 /* Move Indicator */
