@@ -105,9 +105,30 @@ const RubiksSolver = () => {
   const handleStepForward = () => {
     if (currentStep < solutionSteps.length) {
       const move = solutionSteps[currentStep].move;
+      console.log(`Applying move ${currentStep + 1}/${solutionSteps.length}: ${move}`);
+      
       const newState = cubeUtils.applyMove(cubeState, move);
+      const validation = cubeUtils.validateCubeState(newState);
+      
+      if (!validation.isValid) {
+        console.error('Invalid state after move:', move, validation.errors);
+        alert('Move resulted in invalid cube state. Please reset.');
+        return;
+      }
+      
       setCubeState(newState);
       setCurrentStep(currentStep + 1);
+      
+      // Check if cube is solved after this move
+      if (currentStep + 1 === solutionSteps.length) {
+        const isSolved = cubeUtils.isSolved(newState);
+        console.log('Final step completed. Cube solved:', isSolved);
+        if (isSolved) {
+          console.log('🎉 Cube successfully solved!');
+        } else {
+          console.warn('⚠️ All steps completed but cube is not solved');
+        }
+      }
     }
   };
 
