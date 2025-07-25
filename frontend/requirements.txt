@@ -1,0 +1,81 @@
+# Frontend Dependencies Documentation
+# This file documents the frontend dependencies for the Rubik's Cube Solver
+# Actual dependencies are managed in package.json
+
+## Core React Framework
+react@^19.0.0                    # Main React library
+react-dom@^19.0.0               # React DOM rendering
+react-scripts@5.0.1             # Create React App scripts
+react-router-dom@^7.5.1         # Client-side routing
+
+## Development Build Tools
+@craco/craco@^7.1.0            # Configuration override
+autoprefixer@^10.4.20          # CSS vendor prefixes
+postcss@^8.4.49                # CSS post-processing
+tailwindcss@^3.4.17            # Utility-first CSS framework
+
+## UI Component Library & Styling
+@radix-ui/react-*               # Headless UI components
+lucide-react@^0.507.0          # SVG icon library
+tailwindcss-animate@^1.0.7     # Animation utilities
+class-variance-authority@^0.7.1 # Variant management
+clsx@^2.1.1                    # Conditional className utility
+tailwind-merge@^3.2.0          # Tailwind class merging
+
+## Form Handling & Validation
+react-hook-form@^7.56.2        # Form state management
+@hookform/resolvers@^5.0.1     # Form validation resolvers
+zod@^3.24.4                    # Schema validation
+
+## Date & Time
+date-fns@^4.1.0               # Date utility library
+react-day-picker@8.10.1       # Date picker component
+
+## UI Enhancements
+sonner@^2.0.3                 # Toast notifications
+next-themes@^0.4.6            # Theme management
+vaul@^1.1.2                   # Drawer/modal components
+
+## Development Tools
+eslint@9.23.0                 # JavaScript/React linting
+eslint-plugin-*               # ESLint plugins for React
+globals@15.15.0               # Global variable definitions
+
+## Carousel & Interactive Components
+embla-carousel-react@^8.6.0   # Carousel component
+react-resizable-panels@^3.0.1 # Resizable panel layouts
+cmdk@^1.1.1                   # Command palette
+
+## Input Components
+input-otp@^1.4.2              # OTP input component
+
+## HTTP Client
+axios@^1.8.4                  # HTTP client for API calls
+
+## Node.js Version Requirement
+# Node.js 18+ required for React 19 compatibility
+# npm/yarn package manager
+
+## Development Scripts Available
+# yarn start    - Development server
+# yarn build    - Production build  
+# yarn test     - Run tests
+# yarn lint     - Run ESLint
+# yarn format   - Format with Prettier
+
+## Browser Support
+# Chrome 90+, Firefox 88+, Safari 14+
+# Modern ES2020+ features required
+# CSS Grid and Flexbox support required
+# CSS 3D Transforms required for cube visualization
+
+## Performance Requirements
+# First Contentful Paint < 1.5s
+# Largest Contentful Paint < 2.5s  
+# Cumulative Layout Shift < 0.1
+# First Input Delay < 100ms
+
+## Build Output
+# Static files suitable for CDN deployment
+# Service worker for offline functionality (optional)
+# Bundle size target < 500KB gzipped

@@ -1,0 +1,70 @@
+MIT License
+
+Copyright (c) 2025 Emergent AI - Advanced Rubik's Cube Solver
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+
+Third-Party Licenses:
+
+This project includes third-party software components with the following licenses:
+
+React (MIT License)
+Copyright (c) Meta Platforms, Inc. and affiliates.
+
+FastAPI (MIT License)  
+Copyright (c) 2018 Sebastián Ramírez
+
+Tailwind CSS (MIT License)
+Copyright (c) Tailwind Labs, Inc.
+
+MongoDB Driver (Apache License 2.0)
+Copyright (c) MongoDB, Inc.
+
+Radix UI (MIT License)
+Copyright (c) 2022 WorkOS
+
+Lucide Icons (ISC License)
+Copyright (c) 2020, Lucide Contributors
+
+For full license texts of dependencies, see the respective package documentation.
+
+================================================================================
+
+Attribution Requirements:
+
+If you use this software in derivative works, please include attribution:
+"Powered by Advanced Rubik's Cube Solver by Emergent AI"
+
+Educational Use:
+This software is designed for educational purposes and to demonstrate
+advanced algorithms and data structures. Commercial use is permitted
+under the terms of this license.
+
+Algorithm References:
+This project implements well-known Rubik's Cube solving algorithms that
+are in the public domain. No proprietary algorithms are claimed.
+
+================================================================================
+
+Contact Information:
+For licensing questions: legal@emergent.sh
+For technical support: support@emergent.sh
+Project Homepage: https://github.com/emergent-ai/rubiks-cube-solver
