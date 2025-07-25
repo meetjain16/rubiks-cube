@@ -1,0 +1,258 @@
+/* 3D Rubik's Cube Styles */
+.cube-container {
+  perspective: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  position: relative;
+}
+
+.cube {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(-30deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  animation: idle-rotate 20s infinite linear;
+}
+
+.cube.animating {
+  animation: solve-spin 0.6s ease-in-out;
+}
+
+@keyframes idle-rotate {
+  0% { transform: rotateX(-20deg) rotateY(-30deg); }
+  25% { transform: rotateX(-10deg) rotateY(30deg); }
+  50% { transform: rotateX(-30deg) rotateY(90deg); }
+  75% { transform: rotateX(-15deg) rotateY(150deg); }
+  100% { transform: rotateX(-20deg) rotateY(210deg); }
+}
+
+@keyframes solve-spin {
+  0% { transform: rotateX(-20deg) rotateY(-30deg) scale(1); }
+  50% { transform: rotateX(10deg) rotateY(30deg) scale(1.1); }
+  100% { transform: rotateX(-20deg) rotateY(-30deg) scale(1); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+}
+
+/* Face Positioning */
+.cube-face.front {
+  transform: rotateY(0deg) translateZ(150px);
+  background: rgba(0, 255, 0, 0.1);
+  border: 2px solid rgba(0, 255, 0, 0.3);
+}
+
+.cube-face.back {
+  transform: rotateY(180deg) translateZ(150px);
+  background: rgba(0, 0, 255, 0.1);
+  border: 2px solid rgba(0, 0, 255, 0.3);
+}
+
+.cube-face.right {
+  transform: rotateY(90deg) translateZ(150px);
+  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid rgba(255, 0, 0, 0.3);
+}
+
+.cube-face.left {
+  transform: rotateY(-90deg) translateZ(150px);
+  background: rgba(255, 140, 0, 0.1);
+  border: 2px solid rgba(255, 140, 0, 0.3);
+}
+
+.cube-face.top {
+  transform: rotateX(90deg) translateZ(150px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cube-face.bottom {
+  transform: rotateX(-90deg) translateZ(150px);
+  background: rgba(255, 213, 0, 0.1);
+  border: 2px solid rgba(255, 213, 0, 0.3);
+}
+
+/* Stickers */
+.sticker {
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.sticker::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.sticker:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Cube Controls */
+.cube-controls {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  space-x: 12px;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.control-btn:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Move Indicator */
+.move-indicator {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(147, 51, 234, 0.9) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 12px 24px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: move-pulse 1s ease-in-out infinite alternate;
+}
+
+.move-text {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+@keyframes move-pulse {
+  0% { 
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  100% { 
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 25px 50px rgba(59, 130, 246, 0.4);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cube {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .cube-face {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .cube-face.front,
+  .cube-face.back,
+  .cube-face.right,
+  .cube-face.left {
+    transform-origin: center;
+  }
+  
+  .cube-face.front { transform: rotateY(0deg) translateZ(125px); }
+  .cube-face.back { transform: rotateY(180deg) translateZ(125px); }
+  .cube-face.right { transform: rotateY(90deg) translateZ(125px); }
+  .cube-face.left { transform: rotateY(-90deg) translateZ(125px); }
+  .cube-face.top { transform: rotateX(90deg) translateZ(125px); }
+  .cube-face.bottom { transform: rotateX(-90deg) translateZ(125px); }
+  
+  .move-indicator {
+    top: -60px;
+  }
+  
+  .move-text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cube {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .cube-face {
+    width: 200px;
+    height: 200px;
+    gap: 2px;
+    padding: 8px;
+  }
+  
+  .cube-face.front { transform: rotateY(0deg) translateZ(100px); }
+  .cube-face.back { transform: rotateY(180deg) translateZ(100px); }
+  .cube-face.right { transform: rotateY(90deg) translateZ(100px); }
+  .cube-face.left { transform: rotateY(-90deg) translateZ(100px); }
+  .cube-face.top { transform: rotateX(90deg) translateZ(100px); }
+  .cube-face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+}
+
+/* Advanced Animation Effects */
+.cube-face {
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cube.animating .cube-face {
+  animation: face-highlight 0.6s ease-in-out;
+}
+
+@keyframes face-highlight {
+  0% { 
+    filter: brightness(1) saturate(1);
+    border-width: 2px;
+  }
+  50% { 
+    filter: brightness(1.3) saturate(1.5);
+    border-width: 4px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  }
+  100% { 
+    filter: brightness(1) saturate(1);
+    border-width: 2px;
+  }
+}
