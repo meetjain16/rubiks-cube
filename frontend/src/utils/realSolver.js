@@ -154,26 +154,41 @@ export const realSolver = {
 
   // Format solution into algorithm-specific phases
   formatSolutionByAlgorithm(moves, algorithm) {
+    console.log('Formatting solution for algorithm:', algorithm, 'with moves:', moves);
+    
+    if (!moves || moves.length === 0) {
+      console.warn('No moves to format, returning empty solution');
+      return {
+        steps: [],
+        phases: [],
+        totalMoves: 0
+      };
+    }
+    
     const phases = this.getPhaseDefinitions(algorithm);
     const steps = [];
     let moveIndex = 0;
     
-    phases.forEach(phase => {
+    phases.forEach((phase, phaseIndex) => {
       const phaseMovesCount = Math.min(phase.moveCount, moves.length - moveIndex);
+      console.log(`Phase ${phaseIndex + 1} (${phase.name}): allocating ${phaseMovesCount} moves`);
       
       for (let i = 0; i < phaseMovesCount; i++) {
         if (moveIndex < moves.length) {
-          steps.push({
+          const step = {
             move: moves[moveIndex],
             phase: phase.name,
             title: phase.titles[i % phase.titles.length],
             description: phase.descriptions[i % phase.descriptions.length],
             tip: phase.tips[Math.floor(Math.random() * phase.tips.length)]
-          });
+          };
+          steps.push(step);
           moveIndex++;
         }
       }
     });
+    
+    console.log('Generated steps:', steps.length);
     
     return {
       steps: steps,
