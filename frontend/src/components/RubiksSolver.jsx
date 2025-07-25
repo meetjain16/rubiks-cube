@@ -5,6 +5,7 @@ import SolutionSteps from './SolutionSteps';
 import NavigationTabs from './NavigationTabs';
 import { mockSolverApi } from '../utils/mockApi';
 import { cubeUtils } from '../utils/cubeUtils';
+import { realSolver } from '../utils/realSolver';
 
 const RubiksSolver = () => {
   const [cubeState, setCubeState] = useState(cubeUtils.getSolvedState());
