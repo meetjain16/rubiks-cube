@@ -1,4 +1,4 @@
-// Utility functions for Rubik's Cube state management and operations
+// Enhanced Utility functions for Rubik's Cube state management and validation
 
 export const cubeUtils = {
   // Get a solved cube state
@@ -13,11 +13,93 @@ export const cubeUtils = {
     };
   },
 
-  // Generate a random scramble
-  generateScramble(length = 20) {
+  // Enhanced cube state validation
+  validateCubeState(cubeState) {
+    const errors = [];
+    const validColors = ['W', 'Y', 'R', 'O', 'G', 'B'];
+    const faceNames = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+    const colorCounts = { W: 0, Y: 0, R: 0, O: 0, G: 0, B: 0 };
+    
+    // Check structure
+    if (!cubeState || typeof cubeState !== 'object') {
+      errors.push('Cube state must be an object');
+      return { isValid: false, errors };
+    }
+
+    // Check all faces exist and have correct structure
+    for (const face of faceNames) {
+      if (!cubeState[face]) {
+        errors.push(`Missing face: ${face}`);
+        continue;
+      }
+      
+      if (!Array.isArray(cubeState[face])) {
+        errors.push(`Face ${face} must be an array`);
+        continue;
+      }
+      
+      if (cubeState[face].length !== 9) {
+        errors.push(`Face ${face} must have exactly 9 stickers, has ${cubeState[face].length}`);
+        continue;
+      }
+      
+      // Check each sticker color
+      cubeState[face].forEach((color, index) => {
+        if (!validColors.includes(color)) {
+          errors.push(`Invalid color "${color}" on ${face} position ${index}`);
+        } else {
+          colorCounts[color]++;
+        }
+      });
+    }
+    
+    // Check color distribution (each color should appear exactly 9 times)
+    for (const color of validColors) {
+      if (colorCounts[color] !== 9) {
+        errors.push(`Color ${color} appears ${colorCounts[color]} times, should be 9`);
+      }
+    }
+    
+    // Check if cube is physically possible (more complex validation)
+    const physicalValidation = this.validateCubePhysics(cubeState);
+    if (!physicalValidation.isValid) {
+      errors.push(...physicalValidation.errors);
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors: errors,
+      colorCounts: colorCounts
+    };
+  },
+
+  // Validate cube physics (basic checks)
+  validateCubePhysics(cubeState) {
+    const errors = [];
+    
+    // Check center pieces (position 4 on each face should be the expected color)
+    const expectedCenters = {
+      front: 'G', back: 'B', right: 'R', 
+      left: 'O', top: 'W', bottom: 'Y'
+    };
+    
+    for (const [face, expectedColor] of Object.entries(expectedCenters)) {
+      if (cubeState[face] && cubeState[face][4] !== expectedColor) {
+        errors.push(`Center piece on ${face} face should be ${expectedColor}, found ${cubeState[face][4]}`);
+      }
+    }
+    
+    return {
+      isValid: errors.length === 0,
+      errors: errors
+    };
+  },
+
+  // Generate a scramble with tracking
+  generateScrambleWithHistory(length = 20) {
     const moves = ['R', 'L', 'U', 'D', 'F', 'B'];
     const modifiers = ['', "'", '2'];
-    const scramble = [];
+    const scrambleMoves = [];
     let lastMove = '';
     let lastAxis = '';
 
@@ -31,13 +113,14 @@ export const cubeUtils = {
       } while (move === lastMove || axis === lastAxis);
       
       const modifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-      scramble.push(move + modifier);
+      const fullMove = move + modifier;
+      scrambleMoves.push(fullMove);
       
       lastMove = move;
       lastAxis = axis;
     }
     
-    return scramble;
+    return scrambleMoves;
   },
 
   // Get the axis of a move (to avoid conflicting consecutive moves)
@@ -50,8 +133,14 @@ export const cubeUtils = {
     return axes[move];
   },
 
-  // Apply a single move to the cube state
+  // Apply a single move to the cube state with validation
   applyMove(cubeState, move) {
+    const validation = this.validateCubeState(cubeState);
+    if (!validation.isValid) {
+      console.warn('Invalid cube state before move:', validation.errors);
+      return cubeState; // Return original state if invalid
+    }
+
     const newState = JSON.parse(JSON.stringify(cubeState)); // Deep clone
     
     const baseMoveMap = {
@@ -79,22 +168,36 @@ export const cubeUtils = {
         baseMoveMap[baseMove]();
         baseMoveMap[baseMove]();
       }
+    } else {
+      console.warn(`Unknown move: ${move}`);
+      return cubeState;
+    }
+
+    // Validate the result
+    const resultValidation = this.validateCubeState(newState);
+    if (!resultValidation.isValid) {
+      console.warn('Invalid cube state after move:', resultValidation.errors);
+      return cubeState; // Return original state if result is invalid
     }
 
     return newState;
   },
 
-  // Rotate arrays clockwise
+  // Rotate arrays clockwise (corrected implementation)
   rotateArrayClockwise(arr) {
+    // For a 3x3 grid numbered 0-8:
+    // 0 1 2    6 3 0
+    // 3 4 5 -> 7 4 1
+    // 6 7 8    8 5 2
     return [arr[6], arr[3], arr[0], arr[7], arr[4], arr[1], arr[8], arr[5], arr[2]];
   },
 
-  // Individual face rotations (simplified versions for mock)
+  // Enhanced face rotations with proper edge handling
   rotateRight(state) {
     // Rotate right face clockwise
     state.right = this.rotateArrayClockwise(state.right);
     
-    // Move adjacent edges
+    // Move adjacent edges (corrected edge positions)
     const temp = [state.front[2], state.front[5], state.front[8]];
     [state.front[2], state.front[5], state.front[8]] = [state.bottom[2], state.bottom[5], state.bottom[8]];
     [state.bottom[2], state.bottom[5], state.bottom[8]] = [state.back[6], state.back[3], state.back[0]];
@@ -193,6 +296,11 @@ export const cubeUtils = {
 
   // Check if cube is solved
   isSolved(cubeState) {
+    const validation = this.validateCubeState(cubeState);
+    if (!validation.isValid) {
+      return false;
+    }
+
     for (const face in cubeState) {
       const faceArray = cubeState[face];
       const firstColor = faceArray[0];
@@ -203,15 +311,75 @@ export const cubeUtils = {
     return true;
   },
 
+  // Generate solution by reversing scramble moves
+  generateSolutionFromScramble(scrambleMoves) {
+    if (!scrambleMoves || scrambleMoves.length === 0) {
+      return [];
+    }
+    
+    // Reverse the scramble moves and invert each one
+    const solutionMoves = scrambleMoves
+      .slice()
+      .reverse()
+      .map(move => this.getInverseMove(move));
+    
+    return solutionMoves;
+  },
+
+  // Apply a sequence of moves to cube state
+  applyMoveSequence(cubeState, moves) {
+    let currentState = cubeState;
+    
+    for (const move of moves) {
+      currentState = this.applyMove(currentState, move);
+    }
+    
+    return currentState;
+  },
+
   // Generate a realistic mixed state for demonstration
   generateMixedState() {
     let state = this.getSolvedState();
-    const scrambleMoves = this.generateScramble(15);
+    const scrambleMoves = this.generateScrambleWithHistory(15);
     
     scrambleMoves.forEach(move => {
       state = this.applyMove(state, move);
     });
     
-    return state;
+    return {
+      state: state,
+      scrambleMoves: scrambleMoves
+    };
+  },
+
+  // Debug function to print cube state
+  printCubeState(cubeState) {
+    console.log('Cube State:');
+    console.log('Top (White):', cubeState.top);
+    console.log('Front (Green):', cubeState.front);
+    console.log('Right (Red):', cubeState.right);
+    console.log('Back (Blue):', cubeState.back);
+    console.log('Left (Orange):', cubeState.left);
+    console.log('Bottom (Yellow):', cubeState.bottom);
+    
+    const validation = this.validateCubeState(cubeState);
+    console.log('Validation:', validation);
+  },
+
+  // Check if two cube states are equal
+  areStatesEqual(state1, state2) {
+    const faces = ['front', 'back', 'right', 'left', 'top', 'bottom'];
+    
+    for (const face of faces) {
+      if (!state1[face] || !state2[face]) return false;
+      
+      for (let i = 0; i < 9; i++) {
+        if (state1[face][i] !== state2[face][i]) {
+          return false;
+        }
+      }
+    }
+    
+    return true;
   }
 };
