@@ -23,7 +23,9 @@ const RubiksSolver = () => {
     if (isAnimating) return;
     
     setIsAnimating(true);
-    const scrambleMoves = cubeUtils.generateScramble(20);
+    const scrambleMoves = cubeUtils.generateScrambleWithHistory(20);
+    setScrambleHistory(scrambleMoves); // Store scramble for solving
+    
     let newState = cubeState;
     
     for (let i = 0; i < scrambleMoves.length; i++) {
@@ -32,7 +34,16 @@ const RubiksSolver = () => {
         setCubeState({...newState});
         
         if (i === scrambleMoves.length - 1) {
-          setTimeout(() => setIsAnimating(false), 300);
+          setTimeout(() => {
+            setIsAnimating(false);
+            // Validate final state
+            const validation = cubeUtils.validateCubeState(newState);
+            if (!validation.isValid) {
+              console.warn('Invalid cube state after scramble:', validation.errors);
+            } else {
+              console.log('Scramble completed successfully');
+            }
+          }, 300);
         }
       }, i * 200);
     }
