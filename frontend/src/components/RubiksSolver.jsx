@@ -438,6 +438,13 @@ const RubiksSolver = () => {
               <div className="text-2xl font-bold text-pink-400">{selectedAlgorithm}</div>
               <div className="text-sm text-gray-400">Algorithm</div>
             </div>
+            <div className="w-px h-8 bg-white/20" />
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400">
+                {cubeUtils.isSolved(cubeState) ? '✓' : scrambleHistory.length > 0 ? 'Scrambled' : 'Ready'}
+              </div>
+              <div className="text-sm text-gray-400">Status</div>
+            </div>
           </div>
         </div>
       </div>
