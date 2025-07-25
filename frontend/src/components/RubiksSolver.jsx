@@ -158,15 +158,27 @@ const RubiksSolver = () => {
       const moves = cubeUtils.parseNotation(notation);
       let newState = cubeUtils.getSolvedState();
       
-      moves.forEach(move => {
+      console.log('Applying imported moves:', moves);
+      
+      // Apply moves one by one and validate
+      moves.forEach((move, index) => {
         newState = cubeUtils.applyMove(newState, move);
+        const validation = cubeUtils.validateCubeState(newState);
+        if (!validation.isValid) {
+          throw new Error(`Invalid state after move ${index + 1} (${move}): ${validation.errors.join(', ')}`);
+        }
       });
       
       setCubeState(newState);
       setSolutionSteps([]);
       setCurrentStep(0);
+      setScrambleHistory(moves); // Store imported moves as scramble history
+      
+      console.log('Notation imported successfully');
+      
     } catch (error) {
-      alert('Invalid notation format');
+      console.error('Import failed:', error);
+      alert('Invalid notation format: ' + error.message);
     }
   };
 
