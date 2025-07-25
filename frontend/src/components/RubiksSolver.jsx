@@ -56,17 +56,47 @@ const RubiksSolver = () => {
   const handleSolve = async () => {
     if (isAnimating || isSolving) return;
     
+    // Validate cube state before solving
+    const validation = cubeUtils.validateCubeState(cubeState);
+    if (!validation.isValid) {
+      alert('Invalid cube state. Please reset and try again.\nErrors: ' + validation.errors.join(', '));
+      return;
+    }
+    
+    // Check if already solved
+    if (cubeUtils.isSolved(cubeState)) {
+      alert('Cube is already solved!');
+      return;
+    }
+    
     setIsSolving(true);
     setSolveTime(null);
     const startTime = Date.now();
     
     try {
-      const solution = await mockSolverApi.solve(cubeState, selectedAlgorithm);
+      console.log('Solving with algorithm:', selectedAlgorithm);
+      console.log('Scramble history available:', scrambleHistory.length > 0);
+      
+      // Use real solver that generates working moves
+      const solution = realSolver.solve(cubeState, scrambleHistory, selectedAlgorithm);
+      
+      console.log('Solution generated:', solution.totalMoves, 'moves');
       setSolutionSteps(solution.steps);
       setCurrentStep(0);
       setSolveTime(Date.now() - startTime);
+      
+      // Test the solution by applying all moves to verify it solves
+      const testState = cubeUtils.applyMoveSequence(cubeState, solution.steps.map(step => step.move));
+      const isActuallySolved = cubeUtils.isSolved(testState);
+      
+      console.log('Solution verification - Will solve:', isActuallySolved);
+      if (!isActuallySolved) {
+        console.warn('Generated solution does not actually solve the cube!');
+      }
+      
     } catch (error) {
       console.error('Solving failed:', error);
+      alert('Solving failed: ' + error.message);
     } finally {
       setIsSolving(false);
     }
