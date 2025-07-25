@@ -20,7 +20,13 @@ export const realSolver = {
   generateInverseSolution(scrambleMoves, algorithm) {
     console.log('Generating inverse solution from scramble:', scrambleMoves);
     
+    if (!scrambleMoves || scrambleMoves.length === 0) {
+      console.warn('No scramble moves provided, using fallback solution');
+      return this.generateSimplifiedSolution({}, algorithm);
+    }
+    
     const solutionMoves = cubeUtils.generateSolutionFromScramble(scrambleMoves);
+    console.log('Generated inverse moves:', solutionMoves);
     
     return this.formatSolutionByAlgorithm(solutionMoves, algorithm);
   },
