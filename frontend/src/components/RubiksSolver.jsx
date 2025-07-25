@@ -17,6 +17,7 @@ const RubiksSolver = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('CFOP');
   const [activeTab, setActiveTab] = useState('solver');
   const [cubeRotation, setCubeRotation] = useState({ x: -20, y: -30 });
+  const [scrambleHistory, setScrambleHistory] = useState([]);
 
   const handleScramble = async () => {
     if (isAnimating) return;
