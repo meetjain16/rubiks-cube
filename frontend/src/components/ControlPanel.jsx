@@ -3,7 +3,8 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
-import { Shuffle, Play, RotateCcw, Upload, Loader2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Shuffle, Play, RotateCcw, Upload, Loader2, Settings } from 'lucide-react';
 
 const ControlPanel = ({ 
   onScramble, 
@@ -12,7 +13,9 @@ const ControlPanel = ({
   onImportNotation, 
   isAnimating, 
   isSolving,
-  solveTime 
+  solveTime,
+  selectedAlgorithm,
+  setSelectedAlgorithm 
 }) => {
   const [notationInput, setNotationInput] = useState('');
 
@@ -23,6 +26,32 @@ const ControlPanel = ({
     }
   };
 
+  const algorithms = [
+    { 
+      value: 'CFOP', 
+      label: 'CFOP Method',
+      description: 'Cross → F2L → OLL → PLL',
+      difficulty: 'Advanced',
+      avgMoves: '50-60'
+    },
+    { 
+      value: 'Layer-by-Layer', 
+      label: 'Layer-by-Layer',
+      description: 'Bottom → Middle → Top',
+      difficulty: 'Beginner',
+      avgMoves: '70-100'
+    },
+    { 
+      value: 'BFS', 
+      label: 'BFS/DFS Search',
+      description: 'Computer optimal search',
+      difficulty: 'Optimal',
+      avgMoves: '15-25'
+    }
+  ];
+
+  const selectedAlgDetails = algorithms.find(alg => alg.value === selectedAlgorithm);
+
   const sampleScrambles = [
     "R U R' F R F' U F' U F R U R' F R F'",
     "D' F D' F' D F D F' R U R' U' R U' R'",
@@ -31,6 +60,53 @@ const ControlPanel = ({
 
   return (
     <div className="space-y-6">
+      {/* Algorithm Selection */}
+      <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent flex items-center justify-center">
+            <Settings className="w-5 h-5 mr-2 text-green-400" />
+            Algorithm Selection
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Select value={selectedAlgorithm} onValueChange={setSelectedAlgorithm}>
+            <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectValue placeholder="Select solving method" />
+            </SelectTrigger>
+            <SelectContent className="bg-slate-800 border-white/20">
+              {algorithms.map((alg) => (
+                <SelectItem 
+                  key={alg.value} 
+                  value={alg.value}
+                  className="text-white hover:bg-white/10 focus:bg-white/10"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium">{alg.label}</span>
+                    <span className="text-xs text-gray-400">{alg.description}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {selectedAlgDetails && (
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <div className="flex justify-between items-center mb-2">
+                <Badge variant="outline" className={`${
+                  selectedAlgDetails.difficulty === 'Beginner' ? 'border-green-400 text-green-300' :
+                  selectedAlgDetails.difficulty === 'Advanced' ? 'border-yellow-400 text-yellow-300' :
+                  'border-purple-400 text-purple-300'
+                }`}>
+                  {selectedAlgDetails.difficulty}
+                </Badge>
+                <span className="text-sm text-gray-400">{selectedAlgDetails.avgMoves} moves</span>
+              </div>
+              <p className="text-sm text-gray-300">{selectedAlgDetails.description}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Main Controls */}
       <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
         <CardHeader>
@@ -80,7 +156,7 @@ const ControlPanel = ({
           {solveTime && (
             <div className="text-center">
               <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                Solved in {(solveTime / 1000).toFixed(2)}s
+                Solved in {(solveTime / 1000).toFixed(2)}s using {selectedAlgorithm}
               </Badge>
             </div>
           )}
@@ -123,26 +199,6 @@ const ControlPanel = ({
                 {scramble}
               </button>
             ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Algorithm Info */}
-      <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
-        <CardContent className="p-4">
-          <div className="text-center space-y-2">
-            <h3 className="font-bold text-lg text-gray-200">Advanced Algorithms</h3>
-            <div className="flex justify-center space-x-3">
-              <Badge variant="outline" className="border-blue-400 text-blue-300">
-                CFOP Method
-              </Badge>
-              <Badge variant="outline" className="border-purple-400 text-purple-300">
-                Kociemba
-              </Badge>
-            </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Utilizing Cross → F2L → OLL → PLL sequence with optimized move reduction
-            </p>
           </div>
         </CardContent>
       </Card>

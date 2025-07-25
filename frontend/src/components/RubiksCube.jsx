@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
+import { Button } from './ui/button';
+import { RotateCcw, ChevronLeft, ChevronRight, ChevronUp, ChevronDown } from 'lucide-react';
 import '../styles/RubiksCube.css';
 
-const RubiksCube = ({ cubeState, isAnimating, currentMove }) => {
+const RubiksCube = ({ cubeState, isAnimating, currentMove, rotation, onRotate }) => {
   const cubeRef = useRef(null);
 
   const faceColors = {
@@ -34,20 +36,26 @@ const RubiksCube = ({ cubeState, isAnimating, currentMove }) => {
   useEffect(() => {
     if (currentMove && cubeRef.current) {
       const cube = cubeRef.current;
-      cube.classList.add('animating');
+      cube.classList.add('move-animation');
       
       setTimeout(() => {
-        cube.classList.remove('animating');
+        cube.classList.remove('move-animation');
       }, 600);
     }
   }, [currentMove]);
+
+  useEffect(() => {
+    if (cubeRef.current) {
+      cubeRef.current.style.transform = 
+        `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`;
+    }
+  }, [rotation]);
 
   return (
     <div className="cube-container">
       <div 
         ref={cubeRef}
-        className={`cube ${isAnimating ? 'animating' : ''}`}
-        style={{ '--current-move': currentMove || '' }}
+        className={`cube ${isAnimating ? 'scrambling' : ''}`}
       >
         {/* Front Face (Green) */}
         {renderFace('front', cubeState.front, 'front')}
@@ -68,19 +76,59 @@ const RubiksCube = ({ cubeState, isAnimating, currentMove }) => {
         {renderFace('bottom', cubeState.bottom, 'bottom')}
       </div>
 
-      {/* Rotation Controls */}
+      {/* Manual Rotation Controls */}
       <div className="cube-controls">
-        <button 
-          className="control-btn"
-          onClick={() => {
-            if (cubeRef.current) {
-              const current = cubeRef.current.style.transform || 'rotateX(-20deg) rotateY(-30deg)';
-              cubeRef.current.style.transform = current + ' rotateY(90deg)';
-            }
-          }}
-        >
-          ↻ Rotate
-        </button>
+        <div className="control-grid">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onRotate('up')}
+            className="control-btn hover:bg-white/20"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </Button>
+          
+          <div className="control-row">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onRotate('left')}
+              className="control-btn hover:bg-white/20"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onRotate('reset')}
+              className="control-btn hover:bg-white/20"
+              title="Reset view"
+            >
+              <RotateCcw className="w-3 h-3" />
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onRotate('right')}
+              className="control-btn hover:bg-white/20"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+          
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onRotate('down')}
+            className="control-btn hover:bg-white/20"
+          >
+            <ChevronDown className="w-4 h-4" />
+          </Button>
+        </div>
+        
+        <p className="control-label">Rotate Cube</p>
       </div>
 
       {/* Current Move Indicator */}
@@ -88,6 +136,9 @@ const RubiksCube = ({ cubeState, isAnimating, currentMove }) => {
         <div className="move-indicator">
           <div className="move-text">
             {currentMove}
+          </div>
+          <div className="move-description">
+            Step {currentMove}
           </div>
         </div>
       )}
