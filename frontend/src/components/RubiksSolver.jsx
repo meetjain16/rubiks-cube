@@ -147,6 +147,8 @@ const RubiksSolver = () => {
     setSolutionSteps([]);
     setCurrentStep(0);
     setSolveTime(null);
+    setScrambleHistory([]);
+    console.log('Cube reset to solved state');
   };
 
   const handleImportNotation = (notation) => {
