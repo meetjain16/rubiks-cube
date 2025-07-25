@@ -453,6 +453,13 @@ const RubiksSolver = () => {
               onStepBackward={handleStepBackward}
               isAnimating={isAnimating}
             />
+            
+            {/* Debug Info */}
+            <div className="bg-red-500/20 border border-red-500/40 rounded p-2 text-xs text-white">
+              <div>Debug: Steps count = {solutionSteps.length}</div>
+              <div>Current step = {currentStep}</div>
+              <div>Is solving = {isSolving.toString()}</div>
+            </div>
           </div>
         </div>
 
