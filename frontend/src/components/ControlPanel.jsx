@@ -61,7 +61,7 @@ const ControlPanel = ({
   return (
     <div className="space-y-6">
       {/* Algorithm Selection */}
-      <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
+      <Card className="glass-card animate-fadein">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent flex items-center justify-center">
             <Settings className="w-5 h-5 mr-2 text-green-400" />
@@ -108,7 +108,7 @@ const ControlPanel = ({
       </Card>
 
       {/* Main Controls */}
-      <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
+      <Card className="glass-card animate-fadein">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             Cube Controls
@@ -164,7 +164,7 @@ const ControlPanel = ({
       </Card>
 
       {/* Notation Import */}
-      <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-white">
+      <Card className="glass-card animate-fadein">
         <CardHeader>
           <CardTitle className="text-lg font-bold text-center text-gray-200">
             Import Notation
@@ -207,3 +207,33 @@ const ControlPanel = ({
 };
 
 export default ControlPanel;
+
+// Add styles for glassmorphism and fade-in animation
+// You can move these to a CSS/SCSS file if preferred
+const style = document.createElement('style');
+style.innerHTML = `
+.glass-card {
+  background: rgba(30, 41, 59, 0.45); /* slate-800 with opacity */
+  border: 1.5px solid rgba(255,255,255,0.13);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border-radius: 1.25rem;
+  transition: box-shadow 0.3s cubic-bezier(.4,0,.2,1), background 0.3s cubic-bezier(.4,0,.2,1);
+}
+.glass-card:hover {
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
+  background: rgba(30, 41, 59, 0.60);
+}
+.animate-fadein {
+  animation: fadein 0.7s cubic-bezier(.4,0,.2,1);
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
+if (typeof document !== 'undefined' && !document.getElementById('glass-card-style')) {
+  style.id = 'glass-card-style';
+  document.head.appendChild(style);
+}
