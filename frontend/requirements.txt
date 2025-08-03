@@ -3,10 +3,10 @@
 # Actual dependencies are managed in package.json
 
 ## Core React Framework
-react@^19.0.0                    # Main React library
-react-dom@^19.0.0               # React DOM rendering
-react-scripts@5.0.1             # Create React App scripts
-react-router-dom@^7.5.1         # Client-side routing
+# react@^19.0.0                    # Main React library
+# react-dom@^19.0.0               # React DOM rendering
+# react-scripts@5.0.1             # Create React App scripts
+# react-router-dom@^7.5.1         # Client-side routing
 
 ## Development Build Tools
 @craco/craco@^7.1.0            # Configuration override
