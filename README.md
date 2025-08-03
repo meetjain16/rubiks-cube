@@ -3,7 +3,7 @@
 [![React](https://img.shields.io/badge/React-19.0.0-blue?logo=react)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110.1-green?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-green?logo=mongodb)](https://mongodb.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 A sophisticated Rubik's Cube solver featuring advanced algorithms, 3D visualization, and comprehensive educational content. Built for the algorithmic challenge competition, this application demonstrates state-of-the-art problem-solving approaches and efficient data structures.
 
@@ -734,13 +734,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 - [ ] Multiplayer solving competitions
 - [ ] VR/AR cube manipulation interface
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Authors
-
-- **E1 by Emergent** - Initial development and architecture
 - Built for the Algorithmic Challenge Competition 2025
 
 ## 🙏 Acknowledgments
